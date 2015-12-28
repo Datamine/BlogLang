@@ -10,9 +10,9 @@ Below are the formatting options:
 ## Subheader  
 % Comment  
 `Code`  
-* Unordered List  
 *italics*  
 **bold**  
+* Unordered List  
 1. Ordered List   
 [Linktext](URL)   
 [Integer creates a footnote and a link to it]  
