@@ -1,2 +1,21 @@
 # BlogLang
 Small markup language for writing articles for my website at www.johnloeber.com
+
+Existential reason: writing blog posts in pure HTML is annoying. I have to do a lot of formatting with tags, linking footnotes, etc. I'm writing a small compiler to take textfiles and turn them into HTML for my website.
+I know that markdown exists, but I want the language to play nicely with my particular desires and CSS. Thus, this is markdown-inspired.
+
+Below are the formatting options:
+```
+# Header  
+## Subheader  
+% Comment  
+`Code`  
+* Unordered List  
+*italics*  
+**bold**  
+1. Ordered List   
+[Linktext](URL)   
+[Integer creates a footnote and a link to it]  
+```
+
+If I need anything more particular, I'll edit the HTML itself.
