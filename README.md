@@ -24,7 +24,7 @@ Paragraphs/breaks are indicated by double breaks between text, e.g.
 > dolor sit amet.
 
 Some other substitutions:
-* The compiler turns primes (') and double prime(") into apostrophes/single quotes (&lsquo;,&rsquo;), and double quotes (&ldquo;,&rdquo;)
+* The compiler turns primes (') and double prime(") into apostrophes/single quotes (&lsquo; &rsquo;), and double quotes (&ldquo; &rdquo;)
 * Similar for ampersands (&amp;), em-dashes (&mdash;)
 
 If I need anything more particular, I'll edit the HTML itself. I'm thinking about adding support for images and some javascript for spoilers, but those scenarios seem sufficiently rare for me to shelve that for the moment.
