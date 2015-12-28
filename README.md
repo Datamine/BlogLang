@@ -18,4 +18,8 @@ Below are the formatting options:
 [Integer creates a footnote and a link to it]  
 ```
 
+Paragraphs/breaks are indicated by double breaks between text, e.g.
+> Lorem Ipsum
+>
+> dolor sit amet.
 If I need anything more particular, I'll edit the HTML itself.
