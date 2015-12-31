@@ -15,7 +15,7 @@ Below are the formatting options. Note that most of these options are to be appl
 * Unordered List  
 1. Ordered List   
 [Linktext](URL)   
-[Integer creates a footnote and a link to it]  
+^[Integer creates a footnote and a link to it]  
 ```
 
 Paragraphs/breaks are indicated by double breaks between text, e.g.

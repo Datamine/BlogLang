@@ -47,13 +47,23 @@ def emphasis(line):
         locbold = line.find("**")
         locunbold = line.find("**",locbold+1)   
         if locbold >= 0 and locunbold >=0:
-            line = line[:locbold] + "<b>" + line[locbold+2:locunbold] + "</b>" + line[locunbold+2]
+            line = line[:locbold] + "<b>" + line[locbold+2:locunbold] + "</b>" + line[locunbold+2:]
         
         # catch italic
         locital = line.find("*")
         locunital = line.find("*",locital+1)
         if locital >= 0 and locunital >=0:
-            line = line[:locital] + "<b>" + line[locital+1:locunital] + "</b>" + line[locunital+1]
+            line = line[:locital] + "<b>" + line[locital+1:locunital] + "</b>" + line[locunital+1:]
+    return line
+
+def code(line):
+    while line.count("`")>0:
+        loc_code = line.find("`")
+        loc_uncode = line.find("`",loc_code+1)
+        if loc_code >= 0 and loc_uncode >= 0:
+            line = line[:loc_code] + "<code>" + line[loc_code+1:loc_uncode] + "</code>" + line[loc_uncode+1:]
+        else:
+            break
     return line
 
 def header(line):
@@ -63,21 +73,44 @@ def header(line):
         line = "<sh>\n" + line[1:] + "</sh>/n"
     return line
 
+def footnote(line):
+    # footnote reference
+    if "^[" in line:
+        loc_start = line.find("^[")
+        loc_end = line.find("]",loc_start+2)
+        content = line[loc_start+2,loc_end]
+        text = '<small><sup><a href="footnote' + content + '" name="note' + content + '">[' + content + ']</a></sup></small>'
+        line = line[:loc_start] + text + line[loc_end+1:]
+
+    # footnote itself
+    if line.startswith("["):
+        loc_end = line.find("]")
+        content = line[1:loc_end]
+        if content.isdigit():
+            text = '<a href="#note' + content + '" name="footnote' + content + '">[' + content + ']</a> '
+            line = text + line[loc_end+1:]
+    return line
+            
 def process(line):
     """ process a single line: parse from BlogLang to HTML"""
-    line = line.lstrip(" ")
     line = substitute(line)
     line = handle_links(line)
     line = bullet(line)
     line = emphasis(line)
     line = header(line)
+    line = code(line)
+    line = footnote(line)
     return line
 
 def main():
     infile = sys.argv[1]
     with open(infile,'r') as f:
         lines = f.readlines()
-    lines = map(lambda x: process(x), lines)
+    lines = map(lambda x: x.lstrip(" "),lines)
+    # totally leave out comments. do not turn them into <!-- -->
+    # this is a conscious design decision to prevent accidental inclusion of unwanted text.
+    lines = filter(lambda x: not x.startswith("%"),lines)
+    lines = map(process, lines)
     print lines
     
 if __name__=='__main__':
