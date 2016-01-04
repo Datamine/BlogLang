@@ -29,9 +29,9 @@ def substitute(line):
     """ carry out special character substitutions """
     line = line.replace("--","&mdash;")
     line = line.replace(" '"," &lsquo;")
-    line = line.replace("'"," &rsquo;")
+    line = line.replace("'","&rsquo;")
     line = line.replace(' "'," &ldquo;")
-    line = line.replace('"'," &rdquo;")
+    line = line.replace('"',"&rdquo; ")
     return line
 
 def bullet(line):
@@ -60,7 +60,7 @@ def emphasis(line):
         locital = line.find("*")
         locunital = line.find("*",locital+1)
         if locital >= 0 and locunital >=0:
-            line = line[:locital] + "<b>" + line[locital+1:locunital] + "</b>" + line[locunital+1:]
+            line = line[:locital] + "<i>" + line[locital+1:locunital] + "</i>" + line[locunital+1:]
     return line
 
 def code(line):
@@ -87,7 +87,7 @@ def footnote(line):
         loc_start = line.find("^[")
         loc_end = line.find("]",loc_start+2)
         content = line[loc_start+2:loc_end]
-        text = '<small><sup><a href="footnote' + content + '" name="note' + content + '">[' + content + ']</a></sup></small>'
+        text = '<small><sup><a href="#footnote' + content + '" name="note' + content + '">[' + content + ']</a></sup></small>'
         line = line[:loc_start] + text + line[loc_end+1:]
         footnotes = True
 
