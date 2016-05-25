@@ -29,6 +29,8 @@ Some other substitutions:
 
 If I need anything more particular, I'll edit the HTML itself. I'm thinking about adding support for images and some javascript for spoilers, but those scenarios seem sufficiently rare for me to shelve that for the moment.
 
+Note that this version of BlogLang is configured specifically for [my css](https://github.com/Datamine/datamine.github.io/blob/master/globalstyle.css), hence the presence of tags such as `<code>` and `<atitle>`. If you want to use BlogLang, you may need to slightly modify it to suit your CSS -- or modify your CSS. :-)
+
 -----
 
 Instructions: write a textfile using the stylistic conventions described above. Let's call it `example.txt`.  Then run the compiler: `python example.txt`. It will automatically use `template.html`, included in this folder, and you'll get output `example.html`. 
