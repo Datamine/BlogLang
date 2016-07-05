@@ -4,9 +4,13 @@ import sys
 import itertools
 
 footnotes = False
+current_footnote_body = 0
+current_footnote_end = 0
 
 def handle_links(line):
-    """ turn BlogLang links into HTML links"""
+    """ 
+    turn BlogLang links into HTML links
+    """
     while "[" in line and "]" in line:
         start_text = line.index("[")
         end_text = line.index("]")
@@ -26,7 +30,9 @@ def handle_links(line):
     return line
 
 def substitute(line):
-    """ carry out special character substitutions """
+    """
+    carry out special character substitutions
+    """
     line = line.replace("--","&mdash;")
     line = line.replace(" '"," &lsquo;")
     line = line.replace("'","&rsquo;")
@@ -81,13 +87,14 @@ def header(line):
      return line
 
 def footnote(line):
-    global footnotes
+    global footnotes, current_footnote_body, current_footnote_end
     # footnote reference
     if "^[" in line:
         loc_start = line.find("^[")
         loc_end = line.find("]",loc_start+2)
-        content = line[loc_start+2:loc_end]
-        text = '<small><sup><a href="#footnote' + content + '" name="note' + content + '">[' + content + ']</a></sup></small>'
+        #content = line[loc_start+2:loc_end]
+        text = '<small><sup><a href="#footnote' + str(current_footnote_body) + '" name="note' + str(current_footnote_body) + '">[' + str(current_footnote_body) + ']</a></sup></small>'
+        current_footnote_body +=1
         line = line[:loc_start] + text + line[loc_end+1:]
         footnotes = True
 
@@ -96,7 +103,8 @@ def footnote(line):
         loc_end = line.find("]")
         content = line[1:loc_end]
         if content.isdigit():
-            text = '<a href="#note' + content + '" name="footnote' + content + '">[' + content + ']</a> '
+            text = '<a href="#note' + str(current_footnote_end) + '" name="footnote' + str(current_footnote_end) + '">[' + str(current_footnote_end) + ']</a> '
+            current_footnote_end +=1
             line = text + line[loc_end+1:]
     return line
             

@@ -1,0 +1,19 @@
+# Header
+## Subheader  
+% Comment  
+`Code`  
+here are *italics*  
+this is **bold**faced
+* Unordered List 
+* Bullet-pointed
+lorem ipsum dolor... 
+1. apples
+2. oranges
+3. bananas
+this is some text
+[google](www.google.com)   
+here is more text^[10]
+does autonumbering work^[7]
+
+[10] blah blah
+[7] maybe?
