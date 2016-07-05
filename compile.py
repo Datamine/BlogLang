@@ -14,7 +14,7 @@ def handle_links(line):
     while "[" in line and "]" in line:
         start_text = line.index("[")
         end_text = line.index("]")
-        # allow for some spaces. note: this does not allow for links across lines
+        # allow for some spaces. note: this does not allow for links across lines.
         try:
             if line[end_text+1]=="(" or line[end_text+2]=="(" or line[end_text+3]=="(":
                 start_url = line.index("(",end_text)
@@ -41,6 +41,10 @@ def substitute(line):
     return line
 
 def bullet(line):
+    """
+    handle bulletpointing
+    """
+    # the next line means that you cannot start a line with an emphasis indicator.
     if line[0]=="*":
         line = "<li>" + line[1:] + "</li>"
     else:
@@ -54,7 +58,10 @@ def bullet(line):
     return line
 
 def emphasis(line):
-    """ parse italic and bold markup """
+    """ 
+    parse italic and bold markup 
+    """
+    # we can do this because we handle all bulletpointing before handling emphases
     while line.count("*")>0:
         # catch bold
         locbold = line.find("**")
@@ -70,6 +77,9 @@ def emphasis(line):
     return line
 
 def code(line):
+    """
+    handle code formatting
+    """
     while line.count("`")>0:
         loc_code = line.find("`")
         loc_uncode = line.find("`",loc_code+1)
@@ -80,13 +90,19 @@ def code(line):
     return line
 
 def header(line):
-     if line[:2]=="##":
-        line = "<sh>\n" + line[2:] + "\n</sh>\n"
-     elif line[0]=="#":
-        line = "<atitle>\n"+line[1:]+"\n</atitle>\n"
-     return line
+    """
+    handle headers and subheaders
+    """
+    if line[:2]=="##":
+       line = "<sh>\n" + line[2:] + "\n</sh>\n"
+    elif line[0]=="#":
+       line = "<atitle>\n"+line[1:]+"\n</atitle>\n"
+    return line
 
 def footnote(line):
+    """
+    handle both the inline footnote link and the actual footnote at the end of the text
+    """
     global footnotes, current_footnote_body, current_footnote_end
     # footnote reference
     if "^[" in line:
@@ -109,7 +125,9 @@ def footnote(line):
     return line
             
 def process(line):
-    """ process a single line: parse from BlogLang to HTML"""
+    """ 
+    process a single line: parse from BlogLang to HTML
+    """
     line = substitute(line)
     line = handle_links(line)
     line = bullet(line)
@@ -120,6 +138,9 @@ def process(line):
     return line
 
 def isplit(iterable,splitters):
+    """
+    for splitting/tokenizing
+    """
     return [list(g) for k,g in itertools.groupby(iterable,lambda x:x in splitters) if not k]
 
 def main():
@@ -169,6 +190,7 @@ def main():
         else:
             lines_copy.append(lines[i])
     lines_copy = map(lambda x: x + "\n", lines_copy)
+
     # now put it in the template
     global footnotes
     with open("template.html",'r') as f:
@@ -180,6 +202,7 @@ def main():
                 # because the paragraph tag before the footnote
                 start = x
                 break
+        # magic numbers are directly from the template, denoting the start/end of the body text, etc.
         all_lines = template[:39] + lines_copy[:start] + template[39:42] + lines_copy[start:] + template[43:]
     if not footnotes:
         all_lines = template[:39] + lines_copy + template[39:]
