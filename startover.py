@@ -5,14 +5,16 @@ John Loeber | Python 2.7.10 | contact@johnloeber.com | October 31, 2016 (spooky.
 
 import sys
 
-footnotes = False
-current_footnote_body = 0
-current_footnote_end = 0
-
-# configuration options are all falsy by default.
+CONFIGURATION_OPTIONS = ["TITLE:", "MATHJAX:", "INLINE_CODE:"]
+# global variables: config options
 title = ''
 mathjax = False
 inline_code = False
+
+# global variables: other junk
+footnotes = False
+current_footnote_body = 0
+current_footnote_end = 0
 
 def throw_error(complaint):
     """
@@ -45,76 +47,77 @@ def open_bloglang_file():
             throw_error('bad_file')
 
     # do more AST parsing here?
-    line_offset = set_config_options(blog_lines)
+    line_offset = handle_config_options(blog_lines)
     return blog_lines[line_offset:]
 
-def set_global_arg_for_config_option(global_option, option_name, argument):
+def set_options(option_set):
     """
-    Set the global argument for the configuration option. Check first that it isn't
-    already set. Note that the default args for all the config opts are falsy.
+    Set the options to their configuration arguments. All option names are ensured
+    validity by handle_config_options, and arguments are already stripped.
     """
-    sys.stdout.write("Setting option " + option_name[:-1] + " to " + argument + "\n")
-    global global_option
-    if global_option:
-        throw_error('multiple_options')
-    else:
-        global_option = argument
-
-def set_config_option(option, argument):
-    """
-    Set an individual configuration option. Check that it isn't already set.
-    We call this from set_config_options, where we've ensured that _option_ is
-    valid. NB: this code technically lets the user set an argument to '' as many
-    times as they like, because it's recognized as falsy, but this is not a
-    concerning bug. -- actually no this sucks. need to change.
-    """
-    sys.stdout.write("Setting option " + option[:-1] + " to " + argument + "\n")
-    if option == "TITLE:":
-        global title
-        if title:
-            throw_error('multiple_options')
-        else:
+    for (option_name, argument) in option_set:
+        sys.stdout.write("Setting option " + option_name[:-1] + " to '" + argument + "'\n")
+        if option_name == "TITLE:":
+            global title
             title = argument
-    elif option == "MATHJAX:":
-         global mathjax
-         if mathjax:
-            throw_error('multiple_options')
-         else:
-            mathjax = argument.lower()
-    elif option == "INLINE_CODE:":
-        global inline_code
-        if inline_code:
-            throw_error('multiple_options')
-        else:
+        elif option_name == "MATHJAX:":
+            global mathjax
+            mathjax = argument.upper()
+        elif option_name == "INLINE_CODE:":
+            global inline_code
             inline_code = argument.lower()
 
-def set_config_options(blog_lines):
+def validate_options(option_set):
+    """
+    Checks the configuration options for validity.
+    """
+    options = [option for (option, _) in option_set]
+    if not "TITLE:" in options:
+        throw_error('no title')
+    if len(set(options)) < len(options):
+        throw_error('multiple_options')
+    # should check the validity of MATHJAX and INLINE_CODE args here
+
+def handle_config_options(blog_lines):
     """
     Set various configuration options for the output.
     The configuration options are set by the first lines in the blog file,
     so we return the number of those lines, so we can omit them as we proceed.
     """
-    configuration_options = ["TITLE:", "MATHJAX:", "INLINE_CODE:"]
-    options_set = 0
+    global CONFIGURATION_OPTIONS
+    option_set = []
     for line in blog_lines:
-        for option in configuration_options:
+        for option in CONFIGURATION_OPTIONS:
             if option in line:
                 argument = line[len(option):].strip()
-                set_config_option(option, argument)
+                option_set.append((option, argument))
                 break
         else:
-            # if this line contains no config options, then stop processing.
-            abreak
+            # if a line contains no config options, then stop processing.
+            break
 
-    global title
-    if title == '':
-        throw_error('no_title')
+    validate_options(option_set)
+    set_options(option_set)
     # return the number of lines that we processed/can omit going forward.
-    return options_set
+    return len(option_set)
+
+def plaintext_substitution(line):
+    """
+    Replace particular text (punctuation) with its proper HTML representation.
+    """
+    # turn primes into apostrophes
+    # turn double-primes into quotation marks
+    # less than, greater than
+
+    # also handle: ampersands, em dashes, en dashes
+    return line
 
 def main():
+    """
+    Main function... fill this in
+    """
     template = open_template()
-    blog_lines = open_bloglang_file()
-    print [title, mathjax, inline_code]
+    blog_lines = map(plaintext_substitution, open_bloglang_file())
+
 if __name__ == '__main__':
     main()
