@@ -4,6 +4,7 @@ An object to represent the bloglang -> HTML transition
 
 import IOHelper
 import ValidationHelper
+import Utils
 import sys
 
 class Blog(object):
@@ -53,3 +54,6 @@ class Blog(object):
 
         # omit the option lines -- they're irrelevant from here on
         self.blogfile = self.blogfile[len(option_set):]
+
+    def tokenize(self):
+
