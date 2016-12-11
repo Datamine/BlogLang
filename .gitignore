@@ -1,1 +1,6 @@
 output.html
+*.pyc
+*.swp
+*.swo
+*.swn
+*.swa
