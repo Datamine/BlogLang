@@ -20,6 +20,7 @@ def open_template():
     """
     TEMPLATE_FILENAME = 'template.html'
     with open(TEMPLATE_FILENAME, 'r') as f:
+        # should I handle any potential errors here?
         return f.readlines()
 
 def open_bloglang_file():

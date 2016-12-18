@@ -3,7 +3,6 @@ This is a parser for BlogLang files. Read the docs at github.com/datamine/blogla
 John Loeber | Python 2.7.10 | contact@johnloeber.com | October 31, 2016 (spooky.)
 """
 
-import sys
 import Helpers.BlogObject as BlogObject
 
 def plaintext_substitution(line):
@@ -22,6 +21,7 @@ def main():
     Main function... fill this in
     """
     blog = BlogObject.Blog()
+    blog.tokenize()
 
 if __name__ == '__main__':
     main()

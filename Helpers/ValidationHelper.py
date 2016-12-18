@@ -1,5 +1,6 @@
 """
-Helpers for various validators
+This module contains functions for validating various parts of the input
+to the bloglang compiler.
 """
 
 import sys

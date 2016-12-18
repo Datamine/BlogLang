@@ -32,10 +32,10 @@ class Blog(object):
         for line in self.blog_lines:
             for option in self.CONFIGURATION_OPTIONS:
                 if option in line:
-                    # I don't need to.strip() the line because that's done in open_bloglang_file
-                    argument = line[len(option):]
+                    # stripping newlines for the arguments only, whitespace is handled in IOHelper
+                    argument = line[len(option):].strip()
                     option_set.append((option, argument))
-                break
+                    break
             else:
                 # if a line contains no config options, then stop processing.
                 break
@@ -44,7 +44,7 @@ class Blog(object):
 
         # set the options
         for (option_name, argument) in option_set:
-            sys.stdout.write("Setting option " + option_name[:-1] + " to '" + argument + "'\n")
+            sys.stdout.write("Setting option " + option_name[:-1] + " to '" + argument + "\n")
             if option_name == "TITLE:":
                 self.title = argument
             elif option_name == "MATHJAX:":
@@ -53,7 +53,7 @@ class Blog(object):
                 self.inline_code = argument.lower()
 
         # omit the option lines -- they're irrelevant from here on
-        self.blogfile = self.blogfile[len(option_set):]
+        self.blog_lines = self.blog_lines[len(option_set):]
 
     def tokenize(self):
-
+        print self.blog_lines
