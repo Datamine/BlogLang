@@ -17,3 +17,4 @@ does autonumbering work^[7]
 
 [10] blah blah
 [7] maybe?
+>> lalala
